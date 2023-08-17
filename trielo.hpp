@@ -14,8 +14,16 @@ struct OkErrCode {
 	}
 };
 
+template<typename Result_Type>
+struct FailErrCode {
+	Result_Type value;
+	explicit FailErrCode(const Result_Type& v) : value{ v } {
+
+	}
+};
+
 template <class T>
-constexpr std::string_view get_type_name() {
+inline constexpr std::string_view get_type_name() {
 	using namespace std;
 #ifdef __clang__
 	string_view p = __PRETTY_FUNCTION__;
@@ -34,23 +42,23 @@ constexpr std::string_view get_type_name() {
 }
 
 template <auto ptr>
-constexpr std::string_view get_function_name() {
+inline constexpr std::string_view get_function_name() {
 	constexpr std::string_view full_name = __PRETTY_FUNCTION__;
 	constexpr auto begin = full_name.find("=") + 2;
 	constexpr auto end = full_name.find(";", begin);
 	return full_name.substr(begin, end - begin);
 }
 
-void trielo_print_func_args(void) {}
+inline void trielo_print_func_args(void) {}
 
 template <typename HeadArg, typename... TailArg>
-void trielo_print_func_args(HeadArg head_arg, const TailArg&... tail_arg) {
+inline void trielo_print_func_args(HeadArg head_arg, const TailArg&... tail_arg) {
 	std::cout << get_type_name<decltype(head_arg)>() << ": '" << head_arg << '\'';
 	((std::cout << ", " << get_type_name<decltype(head_arg)>() << ": '" << tail_arg << '\''), ...);
 }
 
 template <auto funcPtr, typename... Args>
-void trielo_print_func_name_and_args(const Args&... args) {
+inline void trielo_print_func_name_and_args(const Args&... args) {
 	std::cout << get_function_name<funcPtr>();
 	std::cout << "(";
 	trielo_print_func_args(args...);
@@ -107,9 +115,31 @@ auto trielo(OkErrCode<Result_Type> ok_err_code, Args&&... args) {
 	return result;
 }
 
-template <auto funcPtr, typename... Args>
-auto trieloxit(Args&&... args) {
-	return trielo<funcPtr>(std::forward<Args>(args)...);
+template <auto funcPtr, typename Result_Type, typename... Args>
+auto trielo(FailErrCode<Result_Type> fail_err_code, Args&&... args) {
+	static_assert(
+		std::is_same_v<std::invoke_result_t<decltype(funcPtr), Args...>,
+			       Result_Type>,
+		"Provided function pointer must return the FailErrCode<T> type"
+	);
+
+	auto result = funcPtr(std::forward<Args>(args)...);
+
+	if (result == fail_err_code.value) {
+		std::cout << "ERROR: ";
+	} else {
+		std::cout << "Success: ";
+	}
+	trielo_print_func_name_and_args<funcPtr>(args...);
+	std::cout << ": '";
+	if constexpr (std::is_same_v<decltype(result), bool>) {
+		std::cout << (result ? "true" : "false");
+	} else {
+		std::cout << result;
+	}
+	std::cout << '\'' << std::endl;
+
+	return result;
 }
 
 template <auto funcPtr, typename Result_Type, typename... Args>
@@ -137,6 +167,37 @@ auto trieloxit(OkErrCode<Result_Type> ok_err_code, Args&&... args) {
 	std::cout << '\'' << std::endl;
 
 	if(result != ok_err_code.value) {
+		std::exit(EXIT_FAILURE);
+	}
+
+	return result;
+}
+
+template <auto funcPtr, typename Result_Type, typename... Args>
+auto trieloxit(FailErrCode<Result_Type> ok_err_code, Args&&... args) {
+	static_assert(
+		std::is_same_v<std::invoke_result_t<decltype(funcPtr), Args...>,
+		Result_Type>, "Provided function pointer must return the OkErrCode<T>"
+		"type"
+	);
+
+	auto result = funcPtr(std::forward<Args>(args)...);
+
+	if(result == fail_err_code.value) {
+		std::cout << "ERROR: ";
+	} else {
+		std::cout << "Success: ";
+	}
+	trielo_print_func_name_and_args<funcPtr>(args...);
+	std::cout << ": '";
+	if constexpr (std::is_same_v<decltype(result), bool>) {
+		std::cout << (result ? "true" : "false");
+	} else {
+		std::cout << result;
+	}
+	std::cout << '\'' << std::endl;
+
+	if(result == fail_err_code.value) {
 		std::exit(EXIT_FAILURE);
 	}
 
