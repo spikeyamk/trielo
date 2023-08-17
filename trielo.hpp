@@ -174,7 +174,7 @@ auto trieloxit(OkErrCode<Result_Type> ok_err_code, Args&&... args) {
 }
 
 template <auto funcPtr, typename Result_Type, typename... Args>
-auto trieloxit(FailErrCode<Result_Type> ok_err_code, Args&&... args) {
+auto trieloxit(FailErrCode<Result_Type> fail_err_code, Args&&... args) {
 	static_assert(
 		std::is_same_v<std::invoke_result_t<decltype(funcPtr), Args...>,
 		Result_Type>, "Provided function pointer must return the OkErrCode<T>"
