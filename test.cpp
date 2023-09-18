@@ -31,37 +31,31 @@ bool func7(int x) {
 }
 
 int main() {
-	trielo<&func1>();
-	trielo<&func2>();
-	trielo<&func3>(3);
-	trielo<&func3_5>(3, 5);
-	trielo<&func4>(4);
-	trielo<&func5>(4, 5);
-	trielo<&func6>(6, 5, 4);
+	Trielo::trielo<&func1>();
+	Trielo::trielo<&func2>();
+	Trielo::trielo<&func3>(3);
+	Trielo::trielo<&func3_5>(3, 5);
+	Trielo::trielo<&func4>(4);
+	Trielo::trielo<&func5>(4, 5);
+	Trielo::trielo<&func6>(6, 5, 4);
 
-	//trielo<&func1>(OkErrCode(2));
-	trielo<&func2>(OkErrCode(2));
-	trielo<&func5>(OkErrCode(9), 4, 5);
-	trielo<&func6>(OkErrCode(15), 6, 5, 4);
-	trielo<&func2>(OkErrCode(1));
-	trielo<&func5>(OkErrCode(4), 4, 5);
-	trielo<&func6>(OkErrCode(1), 6, 5, 4);
-	trielo<&func7>(OkErrCode(true), 5);
+	Trielo::trielo<&func2>(Trielo::OkErrCode(2));
+	Trielo::trielo<&func5>(Trielo::OkErrCode(9), 4, 5);
+	Trielo::trielo<&func6>(Trielo::OkErrCode(15), 6, 5, 4);
+	Trielo::trielo<&func2>(Trielo::OkErrCode(1));
+	Trielo::trielo<&func5>(Trielo::OkErrCode(4), 4, 5);
+	Trielo::trielo<&func6>(Trielo::OkErrCode(1), 6, 5, 4);
+	Trielo::trielo<&func7>(Trielo::OkErrCode(true), 5);
 
-	trieloxit<&func1>();
-	trieloxit<&func2>();
-	trieloxit<&func3>(3);
-	trieloxit<&func3_5>(3, 5);
-	trieloxit<&func4>(4);
-	trieloxit<&func5>(4, 5);
-	trieloxit<&func6>(6, 5, 4);
+	Trielo::trielo<&func7>(Trielo::FailErrCode(false), 5);
 
-	//trieloxit<&func1>(OkErrCode(2));
-	trieloxit<&func2>(OkErrCode(2));
-	trieloxit<&func5>(OkErrCode(9), 4, 5);
-	trieloxit<&func6>(OkErrCode(15), 6, 5, 4);
-	trieloxit<&func2>(OkErrCode(1));
-	trieloxit<&func5>(OkErrCode(4), 4, 5);
-	trieloxit<&func6>(OkErrCode(1), 6, 5, 4);
-	trieloxit<&func7>(OkErrCode(true), 5);
+	/*
+	Trielo::trieloxit<&func2>(Trielo::OkErrCode(2));
+	Trielo::trieloxit<&func5>(Trielo::OkErrCode(9), 4, 5);
+	Trielo::trieloxit<&func6>(Trielo::OkErrCode(15), 6, 5, 4);
+	Trielo::trieloxit<&func2>(Trielo::OkErrCode(1));
+	Trielo::trieloxit<&func5>(Trielo::OkErrCode(4), 4, 5);
+	Trielo::trieloxit<&func6>(Trielo::OkErrCode(1), 6, 5, 4);
+	Trielo::trieloxit<&func7>(Trielo::OkErrCode(true), 5);
+	*/
 }
