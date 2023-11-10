@@ -21,18 +21,32 @@ public:
 		{}
 	};
 private:
+public:
 	template <typename T>
 	static inline constexpr std::string_view get_type_name() {
-		std::string_view p = __PRETTY_FUNCTION__;
-		return std::string_view(p.data() + 49, p.find(';', 49) - 49);
+		#ifdef _MSC_VER
+			constexpr std::string_view input { __FUNCSIG__ + 96 };
+    		constexpr auto end = input.find(">");
+			return input.substr(0, end);
+		#endif
+		#ifdef __GNUG__
+			constexpr std::string_view p { __PRETTY_FUNCTION__ };
+			return std::string_view(p.data() + 49, p.find(';', 49) - 49);
+		#endif
 	}
 
 	template <auto FuncPtr>
 	static inline constexpr std::string_view get_function_name() {
-		constexpr std::string_view full_name = __PRETTY_FUNCTION__;
-		constexpr auto begin = full_name.find("=") + 2;
-		constexpr auto end = full_name.find(";", begin);
-		return full_name.substr(begin, end - begin);
+		#ifdef _MSC_VER
+			constexpr std::string_view input { __FUNCSIG__ + 100 };
+			return std::string_view { input.data(), input.find("(") };
+		#endif 
+		#ifdef __GNUG__
+			constexpr std::string_view full_name = __PRETTY_FUNCTION__;
+			constexpr auto begin = full_name.find("=") + 2;
+			constexpr auto end = full_name.find(";", begin);
+			return full_name.substr(begin, end - begin);
+		#endif
 	}
 
 	static inline void trielo_print_func_args(void) {}
@@ -145,4 +159,6 @@ public:
 		}
 		return result;
 	}
+
+	static void test();
 };
