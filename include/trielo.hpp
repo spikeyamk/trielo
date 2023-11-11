@@ -208,8 +208,3 @@ namespace Trielo {
 		return result;
 	}
 }
-
-namespace Trielo {
-	void test();
-}
-

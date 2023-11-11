@@ -1,4 +1,5 @@
 #include "trielo.hpp"
+#include "test.hpp"
 
 void func1(void) {}
 

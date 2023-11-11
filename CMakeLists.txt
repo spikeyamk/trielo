@@ -12,7 +12,7 @@ add_subdirectory(lib/fmt)
 
 # Create a library target
 add_library(trielo STATIC
-    include/trielo.hpp
+    lib/trielo.cpp
 )
 
 target_link_libraries(trielo PUBLIC
@@ -21,7 +21,7 @@ target_link_libraries(trielo PUBLIC
 
 # Include the header files
 target_include_directories(trielo
-    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/my_library
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
 	PUBLIC ${CMAKE_CURRENT_LIST_DIR}/lib/fmt/include
 )
 
