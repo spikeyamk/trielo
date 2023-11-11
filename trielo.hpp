@@ -4,9 +4,9 @@
 #include <string_view>
 #include <type_traits>
 #include <utility>
+#include <functional>
 
-class Trielo {
-public:
+namespace Trielo {
 	template <typename T_Result>
 	struct OkErrCode {
 		T_Result value;
@@ -20,8 +20,7 @@ public:
 		explicit FailErrCode(const T_Result& v) : value{ v } 
 		{}
 	};
-private:
-public:
+
 	template <typename T>
 	static inline constexpr std::string_view get_type_name() {
 		#ifdef _MSC_VER
@@ -64,7 +63,9 @@ public:
 		trielo_print_func_args(args...);
 		std::cout << ")";
 	}
-public:
+}
+
+namespace Trielo {
 	template <auto funcPtr, typename... Args>
 	static auto trielo(Args&&... args) {
 		constexpr bool returns_void = std::is_same_v<std::invoke_result_t<decltype(funcPtr), Args...>, void>;
@@ -141,9 +142,31 @@ public:
 
 		return result;
 	}
-public:
+}
+
+namespace Trielo {
+	template <auto funcPtr, typename T_Lambda, typename T_Result, typename... Args>
+	auto trielo_lambda(OkErrCode<T_Result> ok_err_code, T_Lambda lambda, Args&&... args) {
+		const auto result = trielo<funcPtr>(ok_err_code, std::forward<Args>(args)...);
+		if(result != ok_err_code.value) {
+			lambda();
+		}
+		return result;
+	}
+
+	template <auto funcPtr, typename T_Lambda, typename T_Result, typename... Args>
+	auto trielo_lambda(FailErrCode<T_Result> fail_err_code, T_Lambda lambda, Args&&... args) {
+		const auto result = trielo<funcPtr>(fail_err_code, std::forward<Args>(args)...);
+		if(result != fail_err_code.value) {
+			lambda();
+		}
+		return result;
+	}
+}
+
+namespace Trielo {
 	template <auto funcPtr, typename T_Result, typename... Args>
-	static auto trieloxit(OkErrCode<T_Result> ok_err_code, Args&&... args) {
+	auto trieloxit(OkErrCode<T_Result> ok_err_code, Args&&... args) {
 		const auto result = trielo<funcPtr>(ok_err_code, std::forward<Args>(args)...);
 		if(result != ok_err_code.value) {
 			std::exit(EXIT_FAILURE);
@@ -152,7 +175,7 @@ public:
 	}
 
 	template <auto funcPtr, typename T_Result, typename... Args>
-	static auto trieloxit(FailErrCode<T_Result> fail_err_code, Args&&... args) {
+	auto trieloxit(FailErrCode<T_Result> fail_err_code, Args&&... args) {
 		const auto result = trielo<funcPtr>(fail_err_code, std::forward<Args>(args)...);
 		if(result == fail_err_code.value) {
 			std::exit(EXIT_FAILURE);
@@ -161,4 +184,29 @@ public:
 	}
 
 	static void test();
-};
+}
+
+namespace Trielo {
+	template <auto funcPtr, typename T_Lambda, typename T_Result, typename... Args>
+	auto trieloxit_lambda(OkErrCode<T_Result> ok_err_code, T_Lambda lambda, Args&&... args) {
+		const auto result = trielo<funcPtr>(ok_err_code, std::forward<Args>(args)...);
+		if(result != ok_err_code.value) {
+			lambda();
+			std::exit(EXIT_FAILURE);
+		}
+		return result;
+	}
+
+	template <auto funcPtr, typename T_Lambda, typename T_Result, typename... Args>
+	auto trieloxit_lambda(FailErrCode<T_Result> fail_err_code, T_Lambda lambda, Args&&... args) {
+		const auto result = trielo<funcPtr>(fail_err_code, std::forward<Args>(args)...);
+		if(result == fail_err_code.value) {
+			lambda();
+			std::exit(EXIT_FAILURE);
+		}
+		return result;
+	}
+
+	static void test();
+}
+
