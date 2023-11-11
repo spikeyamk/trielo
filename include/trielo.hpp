@@ -6,6 +6,9 @@
 #include <utility>
 #include <functional>
 
+#include "fmt/core.h"
+#include "fmt/color.h"
+
 namespace Trielo {
 	template <typename T_Result>
 	struct OkErrCode {
@@ -100,9 +103,9 @@ namespace Trielo {
 		auto result = funcPtr(std::forward<Args>(args)...);
 
 		if (result == ok_err_code.value) {
-			std::cout << "Success: ";
+    		fmt::print(fmt::fg(fmt::color::green), "Success: ");
 		} else {
-			std::cout << "ERROR: ";
+    		fmt::print(fmt::fg(fmt::color::red), "ERROR: ");
 		}
 		trielo_print_func_name_and_args<funcPtr>(args...);
 		std::cout << ": '";
@@ -127,9 +130,9 @@ namespace Trielo {
 		auto result = funcPtr(std::forward<Args>(args)...);
 
 		if (result == fail_err_code.value) {
-			std::cout << "ERROR: ";
+    		fmt::print(fmt::fg(fmt::color::red), "ERROR: ");
 		} else {
-			std::cout << "Success: ";
+    		fmt::print(fmt::fg(fmt::color::green), "Success: ");
 		}
 		trielo_print_func_name_and_args<funcPtr>(args...);
 		std::cout << ": '";
@@ -182,8 +185,6 @@ namespace Trielo {
 		}
 		return result;
 	}
-
-	static void test();
 }
 
 namespace Trielo {
@@ -206,7 +207,9 @@ namespace Trielo {
 		}
 		return result;
 	}
+}
 
-	static void test();
+namespace Trielo {
+	void test();
 }
 
