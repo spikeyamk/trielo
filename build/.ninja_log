@@ -1,0 +1,15 @@
+# ninja log v5
+2	107	1702422164088899113	CMakeFiles/run_all.dir/tests/run_all.cpp.o	70a5d2db8f7c5efc
+5	122	1702422164098899114	CMakeFiles/get_type_name.dir/tests/get_type_name.cpp.o	554e6d107b0ba848
+8	128	1702422164108899114	CMakeFiles/get_func_name.dir/tests/get_func_name.cpp.o	d6cdb1eaccccb166
+107	1866	1702422165838899128	lib/fmt/CMakeFiles/fmt.dir/src/os.cc.o	ec950f75ccd54cd3
+0	1975	1702422165948899125	CMakeFiles/trielo.dir/lib/trielo.cpp.o	b7f33e5df8bce92c
+3	2715	1702422166698899103	CMakeFiles/run_all.dir/tests/tests.cpp.o	2ddfd82909a345c3
+9	2743	1702422166718899102	CMakeFiles/get_func_name.dir/tests/tests.cpp.o	cdf0fa35996bd34d
+6	2781	1702422166758899101	CMakeFiles/get_type_name.dir/tests/tests.cpp.o	22e2b7730094fe6f
+10	4572	1702422168548899049	lib/fmt/CMakeFiles/fmt.dir/src/format.cc.o	b89a426e163dfcbe
+4572	4692	1702422168668899045	lib/fmt/libfmtd.a	feb4d95b99503e9d
+4692	4797	1702422168768899042	libtrielo.a	72ebece3c093f555
+4693	5094	1702422169068899033	run_all	da6de7b789c901c1
+4693	5107	1702422169088899033	get_type_name	1cf338b200e29cbd
+4694	5110	1702422169088899033	get_func_name	16e7a16c67de7181

@@ -33,12 +33,12 @@ namespace Trielo {
 		#endif
 		#ifdef __GNUG__
 			constexpr std::string_view p { __PRETTY_FUNCTION__ };
-			return std::string_view(p.data() + 49, p.find(';', 49) - 49);
+			return std::string_view(p.data() + 61, p.find(';', 61) - 61);
 		#endif
 	}
 
 	template <auto FuncPtr>
-	static inline constexpr std::string_view get_function_name() {
+	static inline constexpr std::string_view get_func_name() {
 		#ifdef _MSC_VER
 			constexpr std::string_view input { __FUNCSIG__ + 100 };
 			return std::string_view { input.data(), input.find("(") };
@@ -61,7 +61,7 @@ namespace Trielo {
 
 	template <auto funcPtr, typename... Args>
 	static inline void trielo_print_func_name_and_args(const Args&... args) {
-		std::cout << get_function_name<funcPtr>();
+		std::cout << get_func_name<funcPtr>();
 		std::cout << "(";
 		trielo_print_func_args(args...);
 		std::cout << ")";

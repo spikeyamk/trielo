@@ -1,0 +1,131 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.13"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4
+					]
+				},
+				{
+					"build" : "lib/fmt",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-lib.fmt-Debug-af02b32156f839359e9d.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "lib/fmt",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "trielo",
+					"targetIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "FMT",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 1,
+					"id" : "fmt::@334b76146eeaa333306c",
+					"jsonFile" : "target-fmt-Debug-cd9509ecf40c49fb5fd7.json",
+					"name" : "fmt",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "get_func_name::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-get_func_name-Debug-00165537f79249d06ffb.json",
+					"name" : "get_func_name",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "get_type_name::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-get_type_name-Debug-f30b593c1a86bb8e5a8a.json",
+					"name" : "get_type_name",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "run_all::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-run_all-Debug-f370ed2301506de75d5d.json",
+					"name" : "run_all",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "trielo::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-trielo-Debug-d2f4510b2bbd94dab937.json",
+					"name" : "trielo",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/spikeyamk/trielo/build",
+		"source" : "/home/spikeyamk/trielo"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

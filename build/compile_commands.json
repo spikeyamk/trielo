@@ -1,0 +1,47 @@
+[
+{
+  "directory": "/home/spikeyamk/trielo/build",
+  "command": "/usr/bin/g++ -I/home/spikeyamk/trielo/include -I/home/spikeyamk/trielo/lib/fmt/include -g -Wall -Wextra -Wpedantic -o CMakeFiles/trielo.dir/lib/trielo.cpp.o -c /home/spikeyamk/trielo/lib/trielo.cpp",
+  "file": "/home/spikeyamk/trielo/lib/trielo.cpp"
+},
+{
+  "directory": "/home/spikeyamk/trielo/build",
+  "command": "/usr/bin/g++ -I/home/spikeyamk/trielo/include -I/home/spikeyamk/trielo/lib/fmt/include -g -Wall -Wextra -Wpedantic -o CMakeFiles/run_all.dir/tests/run_all.cpp.o -c /home/spikeyamk/trielo/tests/run_all.cpp",
+  "file": "/home/spikeyamk/trielo/tests/run_all.cpp"
+},
+{
+  "directory": "/home/spikeyamk/trielo/build",
+  "command": "/usr/bin/g++ -I/home/spikeyamk/trielo/include -I/home/spikeyamk/trielo/lib/fmt/include -g -Wall -Wextra -Wpedantic -o CMakeFiles/run_all.dir/tests/tests.cpp.o -c /home/spikeyamk/trielo/tests/tests.cpp",
+  "file": "/home/spikeyamk/trielo/tests/tests.cpp"
+},
+{
+  "directory": "/home/spikeyamk/trielo/build",
+  "command": "/usr/bin/g++ -I/home/spikeyamk/trielo/include -I/home/spikeyamk/trielo/lib/fmt/include -g -Wall -Wextra -Wpedantic -o CMakeFiles/get_type_name.dir/tests/get_type_name.cpp.o -c /home/spikeyamk/trielo/tests/get_type_name.cpp",
+  "file": "/home/spikeyamk/trielo/tests/get_type_name.cpp"
+},
+{
+  "directory": "/home/spikeyamk/trielo/build",
+  "command": "/usr/bin/g++ -I/home/spikeyamk/trielo/include -I/home/spikeyamk/trielo/lib/fmt/include -g -Wall -Wextra -Wpedantic -o CMakeFiles/get_type_name.dir/tests/tests.cpp.o -c /home/spikeyamk/trielo/tests/tests.cpp",
+  "file": "/home/spikeyamk/trielo/tests/tests.cpp"
+},
+{
+  "directory": "/home/spikeyamk/trielo/build",
+  "command": "/usr/bin/g++ -I/home/spikeyamk/trielo/include -I/home/spikeyamk/trielo/lib/fmt/include -g -Wall -Wextra -Wpedantic -o CMakeFiles/get_func_name.dir/tests/get_func_name.cpp.o -c /home/spikeyamk/trielo/tests/get_func_name.cpp",
+  "file": "/home/spikeyamk/trielo/tests/get_func_name.cpp"
+},
+{
+  "directory": "/home/spikeyamk/trielo/build",
+  "command": "/usr/bin/g++ -I/home/spikeyamk/trielo/include -I/home/spikeyamk/trielo/lib/fmt/include -g -Wall -Wextra -Wpedantic -o CMakeFiles/get_func_name.dir/tests/tests.cpp.o -c /home/spikeyamk/trielo/tests/tests.cpp",
+  "file": "/home/spikeyamk/trielo/tests/tests.cpp"
+},
+{
+  "directory": "/home/spikeyamk/trielo/build",
+  "command": "/usr/bin/g++ -I/home/spikeyamk/trielo/lib/fmt/include -g -Wall -Wextra -Wpedantic -o lib/fmt/CMakeFiles/fmt.dir/src/format.cc.o -c /home/spikeyamk/trielo/lib/fmt/src/format.cc",
+  "file": "/home/spikeyamk/trielo/lib/fmt/src/format.cc"
+},
+{
+  "directory": "/home/spikeyamk/trielo/build",
+  "command": "/usr/bin/g++ -I/home/spikeyamk/trielo/lib/fmt/include -g -Wall -Wextra -Wpedantic -o lib/fmt/CMakeFiles/fmt.dir/src/os.cc.o -c /home/spikeyamk/trielo/lib/fmt/src/os.cc",
+  "file": "/home/spikeyamk/trielo/lib/fmt/src/os.cc"
+}
+]
