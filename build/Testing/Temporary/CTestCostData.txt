@@ -1,4 +1,0 @@
-Trielo::Tests::run_all 1 0.0092211
-Trielo::Tests::get_type_name 1 0.0123593
-Trielo::Tests::get_func_name 1 0.0061352
----
