@@ -22,7 +22,7 @@ target_link_libraries(trielo PRIVATE
 # Include the header files
 target_include_directories(trielo
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
-	PUBLCI ${CMAKE_CURRENT_LIST_DIR}/lib/fmt/include
+	PUBLIC ${CMAKE_CURRENT_LIST_DIR}/lib/fmt/include
 )
 
 option(TRIELO_TEST "Enable Trielo Tests")
