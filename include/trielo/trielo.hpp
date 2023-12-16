@@ -9,6 +9,18 @@
 #include "fmt/core.h"
 #include "fmt/color.h"
 
+#define TRIELO_EQ(call, expected) do {\
+    const auto result = call;\
+	if(result == expected) {\
+    	fmt::print(fmt::fg(fmt::color::green), "Success: ");\
+	} else {\
+		fmt::print(fmt::fg(fmt::color::red), "ERROR: ");\
+	}\
+    std::cout << #call << ": '" << result << "'\n";\
+} while (false)
+
+#define TRIELO(call) std::cout << #call << ": '" << call << "'\n";
+
 namespace Trielo {
 	template <typename T_Result>
 	struct OkErrCode {
