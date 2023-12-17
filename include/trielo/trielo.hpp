@@ -21,6 +21,8 @@
 
 #define TRIELO(call) std::cout << #call << ": '" << call << "'\n";
 
+#define TRIELO_VOID(call) std::cout << #call << ": '\n"; call;
+
 namespace Trielo {
 	template <typename T_Result>
 	struct OkErrCode {
