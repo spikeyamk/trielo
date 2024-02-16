@@ -1,26 +1,58 @@
 #include "trielo/trielo.hpp"
 #include "trielo/tests.hpp"
 #include <iostream>
+#include <sstream>
 #include <cstdlib>
 
 namespace Trielo {
-	namespace Functions {
-		namespace ReturnsVoid {
-			void without_args() {}
-			void one_arg(int x = 1) { int junk = x; junk++; }
-			void two_args(int x = 1, int y = 2) { int junk = x + y; junk++; }
-		}
+	namespace Tests {
+		namespace Functions {
+			namespace ReturnsVoid {
+				void without_args() {}
+				void one_arg(int x = 1) { int junk = x; junk++; }
+				void two_args(int x = 1, float y = 2.0f) { (void) x; (void) y; };
+				void consumes_ostreamable(const Ostreamable& obj) {
+					(void) obj;
+				}
+				void consumes_nonostreamable(const NonOstreamable& obj) {
+					(void) obj;
+				}
+				void consumes_arg_reference(const int& x) {
+					(void) x;
+				}
+			}
 
-		namespace ReturnsInt {
-			int without_args() { return 0xFF; }
-			int one_arg(int x = 1) { return x * 0xFF; }
-			int sum(int x = 1, int y = 0xFF - 1) { return x + y; }
-			int product(int x = 1, int y = 0xFF, int z = 1) { return x * y * z; }
-		}
+			namespace ReturnsInt {
+				int without_args() { return 0xFF; }
+				int one_arg(int x = 1) { return x * 0xFF; }
+				int sum(int x = 1, int y = 0xFF - 1) { return x + y; }
+				int product(int x = 1, int y = 0xFF, int z = 1) { return x * y * z; }
+			}
 
-		namespace ReturnsBool {
-			bool returns_false() { return false; }
-			bool returns_true() { return true; }
+			namespace ReturnsBool {
+				bool returns_false() { return false; }
+				bool returns_true() { return true; }
+			}
+
+			namespace ReturnsOstreamable {
+				Ostreamable consumes_ostreamable(const Ostreamable& obj) {
+					return obj;
+				}
+				Ostreamable consumes_nonostreamable(const NonOstreamable& obj) {
+					(void) obj;
+					return Ostreamable {};
+				}
+			}
+
+			namespace ReturnsNonOstreamable {
+				NonOstreamable consumes_ostreamable(const Ostreamable& obj) {
+					(void) obj;
+					return NonOstreamable {};
+				}
+				NonOstreamable consumes_nonostreamable(const NonOstreamable& obj) {
+					return obj;
+				}
+			}
 		}
 	}
 
@@ -40,7 +72,13 @@ namespace Trielo {
 					}
 
 					int two_args() {
-						trielo<&Functions::ReturnsVoid::two_args>(1, 2);
+						trielo<&Functions::ReturnsVoid::two_args>(1, 2.0f);
+						return 0;
+					}	
+
+					int consumes_arg_reference() {
+						int x = 696969;
+						trielo<&Functions::ReturnsVoid::consumes_arg_reference>(x);
 						return 0;
 					}	
 				}
@@ -102,34 +140,34 @@ namespace Trielo {
 				namespace Success {
 					namespace ReturnsInt {
 						int without_args() {
-							trielo<&Functions::ReturnsInt::without_args>(OkErrCode(0xFF));
+							trielo<&Functions::ReturnsInt::without_args>(Code::Success(0xFF));
 							return 0;
 						}
 
 						int one_arg() {
-							trielo<&Functions::ReturnsInt::one_arg>(OkErrCode(0xFF), 1);
+							trielo<&Functions::ReturnsInt::one_arg>(Code::Success(0xFF), 1);
 							return 0;
 						}
 
 						int sum() {
-							trielo<&Functions::ReturnsInt::sum>(OkErrCode(0xFF), 1, 0xFF - 1);
+							trielo<&Functions::ReturnsInt::sum>(Code::Success(0xFF), 1, 0xFF - 1);
 							return 0;
 						}
 
 						int product() {
-							trielo<&Functions::ReturnsInt::product>(OkErrCode(0xFF), 1, 0xFF, 1);
+							trielo<&Functions::ReturnsInt::product>(Code::Success(0xFF), 1, 0xFF, 1);
 							return 0;
 						}
 					}
 
 					namespace ReturnsBool {
 						int returns_false() {
-							trielo<&Functions::ReturnsBool::returns_false>(OkErrCode(false));
+							trielo<&Functions::ReturnsBool::returns_false>(Code::Success(false));
 							return 0;
 						}		
 
 						int returns_true() {
-							trielo<&Functions::ReturnsBool::returns_true>(OkErrCode(true));
+							trielo<&Functions::ReturnsBool::returns_true>(Code::Success(true));
 							return 0;
 						}		
 					}
@@ -138,34 +176,34 @@ namespace Trielo {
 				namespace ERROR {
 					namespace ReturnsInt {
 						int without_args() {
-							trielo<&Functions::ReturnsInt::without_args>(OkErrCode(0x7F));
+							trielo<&Functions::ReturnsInt::without_args>(Code::Success(0x7F));
 							return 0;
 						}
 
 						int one_arg() {
-							trielo<&Functions::ReturnsInt::one_arg>(OkErrCode(0x7F), 1);
+							trielo<&Functions::ReturnsInt::one_arg>(Code::Success(0x7F), 1);
 							return 0;
 						}
 
 						int sum() {
-							trielo<&Functions::ReturnsInt::sum>(OkErrCode(0x7F), 1, 0xFF - 1);
+							trielo<&Functions::ReturnsInt::sum>(Code::Success(0x7F), 1, 0xFF - 1);
 							return 0;
 						}
 
 						int product() {
-							trielo<&Functions::ReturnsInt::product>(OkErrCode(0x7F), 1, 0xFF, 1);
+							trielo<&Functions::ReturnsInt::product>(Code::Success(0x7F), 1, 0xFF, 1);
 							return 0;
 						}
 					}
 
 					namespace ReturnsBool {
 						int returns_false() {
-							trielo<&Functions::ReturnsBool::returns_false>(OkErrCode(true));
+							trielo<&Functions::ReturnsBool::returns_false>(Code::Success(true));
 							return 0;
 						}		
 
 						int returns_true() {
-							trielo<&Functions::ReturnsBool::returns_true>(OkErrCode(false));
+							trielo<&Functions::ReturnsBool::returns_true>(Code::Success(false));
 							return 0;
 						}		
 					}
@@ -176,34 +214,34 @@ namespace Trielo {
 				namespace Success {
 					namespace ReturnsInt {
 						int without_args() {
-							trielo<&Functions::ReturnsInt::without_args>(FailErrCode(0x7F));
+							trielo<&Functions::ReturnsInt::without_args>(Code::Error(0x7F));
 							return 0;
 						}
 
 						int one_arg() {
-							trielo<&Functions::ReturnsInt::one_arg>(FailErrCode(0x7F), 1);
+							trielo<&Functions::ReturnsInt::one_arg>(Code::Error(0x7F), 1);
 							return 0;
 						}
 
 						int sum() {
-							trielo<&Functions::ReturnsInt::sum>(FailErrCode(0x7F), 1, 0xFF - 1);
+							trielo<&Functions::ReturnsInt::sum>(Code::Error(0x7F), 1, 0xFF - 1);
 							return 0;
 						}
 
 						int product() {
-							trielo<&Functions::ReturnsInt::product>(FailErrCode(0x7F), 1, 0xFF, 1);
+							trielo<&Functions::ReturnsInt::product>(Code::Error(0x7F), 1, 0xFF, 1);
 							return 0;
 						}
 					}
 
 					namespace ReturnsBool {
 						int returns_false() {
-							trielo<&Functions::ReturnsBool::returns_false>(FailErrCode(true));
+							trielo<&Functions::ReturnsBool::returns_false>(Code::Error(true));
 							return 0;
 						}		
 
 						int returns_true() {
-							trielo<&Functions::ReturnsBool::returns_true>(FailErrCode(false));
+							trielo<&Functions::ReturnsBool::returns_true>(Code::Error(false));
 							return 0;
 						}		
 					}
@@ -212,34 +250,34 @@ namespace Trielo {
 				namespace ERROR {
 					namespace ReturnsInt {
 						int without_args() {
-							trielo<&Functions::ReturnsInt::without_args>(FailErrCode(0xFF));
+							trielo<&Functions::ReturnsInt::without_args>(Code::Error(0xFF));
 							return 0;
 						}
 
 						int one_arg() {
-							trielo<&Functions::ReturnsInt::one_arg>(FailErrCode(0xFF), 1);
+							trielo<&Functions::ReturnsInt::one_arg>(Code::Error(0xFF), 1);
 							return 0;
 						}
 
 						int sum() {
-							trielo<&Functions::ReturnsInt::sum>(FailErrCode(0xFF), 1, 0xFF - 1);
+							trielo<&Functions::ReturnsInt::sum>(Code::Error(0xFF), 1, 0xFF - 1);
 							return 0;
 						}
 
 						int product() {
-							trielo<&Functions::ReturnsInt::product>(FailErrCode(0xFF), 1, 0xFF, 1);
+							trielo<&Functions::ReturnsInt::product>(Code::Error(0xFF), 1, 0xFF, 1);
 							return 0;
 						}
 					}
 
 					namespace ReturnsBool {
 						int returns_false() {
-							trielo<&Functions::ReturnsBool::returns_false>(FailErrCode(false));
+							trielo<&Functions::ReturnsBool::returns_false>(Code::Error(false));
 							return 0;
 						}		
 
 						int returns_true() {
-							trielo<&Functions::ReturnsBool::returns_true>(FailErrCode(true));
+							trielo<&Functions::ReturnsBool::returns_true>(Code::Error(true));
 							return 0;
 						}		
 					}
@@ -253,34 +291,34 @@ namespace Trielo {
 				namespace Success {
 					namespace ReturnsInt {
 						int without_args() {
-							trieloxit<&Functions::ReturnsInt::without_args>(OkErrCode(0xFF));
+							trieloxit<&Functions::ReturnsInt::without_args>(Code::Success(0xFF));
 							return 0;
 						}
 
 						int one_arg() {
-							trieloxit<&Functions::ReturnsInt::one_arg>(OkErrCode(0xFF), 1);
+							trieloxit<&Functions::ReturnsInt::one_arg>(Code::Success(0xFF), 1);
 							return 0;
 						}
 
 						int sum() {
-							trieloxit<&Functions::ReturnsInt::sum>(OkErrCode(0xFF), 1, 0xFF - 1);
+							trieloxit<&Functions::ReturnsInt::sum>(Code::Success(0xFF), 1, 0xFF - 1);
 							return 0;
 						}
 
 						int product() {
-							trieloxit<&Functions::ReturnsInt::product>(OkErrCode(0xFF), 1, 0xFF, 1);
+							trieloxit<&Functions::ReturnsInt::product>(Code::Success(0xFF), 1, 0xFF, 1);
 							return 0;
 						}
 					}
 
 					namespace ReturnsBool {
 						int returns_false() {
-							trieloxit<&Functions::ReturnsBool::returns_false>(OkErrCode(false));
+							trieloxit<&Functions::ReturnsBool::returns_false>(Code::Success(false));
 							return 0;
 						}		
 
 						int returns_true() {
-							trieloxit<&Functions::ReturnsBool::returns_true>(OkErrCode(true));
+							trieloxit<&Functions::ReturnsBool::returns_true>(Code::Success(true));
 							return 0;
 						}		
 					}
@@ -289,34 +327,34 @@ namespace Trielo {
 				namespace ERROR {
 					namespace ReturnsInt {
 						int without_args() {
-							trieloxit<&Functions::ReturnsInt::without_args>(OkErrCode(0x7F));
+							trieloxit<&Functions::ReturnsInt::without_args>(Code::Success(0x7F));
 							return 0;
 						}
 
 						int one_arg() {
-							trieloxit<&Functions::ReturnsInt::one_arg>(OkErrCode(0x7F), 1);
+							trieloxit<&Functions::ReturnsInt::one_arg>(Code::Success(0x7F), 1);
 							return 0;
 						}
 
 						int sum() {
-							trieloxit<&Functions::ReturnsInt::sum>(OkErrCode(0x7F), 1, 0xFF - 1);
+							trieloxit<&Functions::ReturnsInt::sum>(Code::Success(0x7F), 1, 0xFF - 1);
 							return 0;
 						}
 
 						int product() {
-							trieloxit<&Functions::ReturnsInt::product>(OkErrCode(0x7F), 1, 0xFF, 1);
+							trieloxit<&Functions::ReturnsInt::product>(Code::Success(0x7F), 1, 0xFF, 1);
 							return 0;
 						}
 					}
 
 					namespace ReturnsBool {
 						int returns_false() {
-							trieloxit<&Functions::ReturnsBool::returns_false>(OkErrCode(true));
+							trieloxit<&Functions::ReturnsBool::returns_false>(Code::Success(true));
 							return 0;
 						}		
 
 						int returns_true() {
-							trieloxit<&Functions::ReturnsBool::returns_true>(OkErrCode(false));
+							trieloxit<&Functions::ReturnsBool::returns_true>(Code::Success(false));
 							return 0;
 						}		
 					}
@@ -327,34 +365,34 @@ namespace Trielo {
 				namespace Success{
 					namespace ReturnsInt {
 						int without_args() {
-							trieloxit<&Functions::ReturnsInt::without_args>(FailErrCode(0x7F));
+							trieloxit<&Functions::ReturnsInt::without_args>(Code::Error(0x7F));
 							return 0;
 						}
 
 						int one_arg() {
-							trieloxit<&Functions::ReturnsInt::one_arg>(FailErrCode(0x7F), 1);
+							trieloxit<&Functions::ReturnsInt::one_arg>(Code::Error(0x7F), 1);
 							return 0;
 						}
 
 						int sum() {
-							trieloxit<&Functions::ReturnsInt::sum>(FailErrCode(0x7F), 1, 0xFF - 1);
+							trieloxit<&Functions::ReturnsInt::sum>(Code::Error(0x7F), 1, 0xFF - 1);
 							return 0;
 						}
 
 						int product() {
-							trieloxit<&Functions::ReturnsInt::product>(FailErrCode(0x7F), 1, 0xFF, 1);
+							trieloxit<&Functions::ReturnsInt::product>(Code::Error(0x7F), 1, 0xFF, 1);
 							return 0;
 						}
 					}
 
 					namespace ReturnsBool {
 						int returns_false() {
-							trieloxit<&Functions::ReturnsBool::returns_false>(FailErrCode(true));
+							trieloxit<&Functions::ReturnsBool::returns_false>(Code::Error(true));
 							return 0;
 						}		
 
 						int returns_true() {
-							trieloxit<&Functions::ReturnsBool::returns_true>(FailErrCode(false));
+							trieloxit<&Functions::ReturnsBool::returns_true>(Code::Error(false));
 							return 0;
 						}		
 					}
@@ -363,34 +401,34 @@ namespace Trielo {
 				namespace ERROR {
 					namespace ReturnsInt {
 						int without_args() {
-							trieloxit<&Functions::ReturnsInt::without_args>(FailErrCode(0xFF));
+							trieloxit<&Functions::ReturnsInt::without_args>(Code::Error(0xFF));
 							return 0;
 						}
 
 						int one_arg() {
-							trieloxit<&Functions::ReturnsInt::one_arg>(FailErrCode(0xFF), 1);
+							trieloxit<&Functions::ReturnsInt::one_arg>(Code::Error(0xFF), 1);
 							return 0;
 						}
 
 						int sum() {
-							trieloxit<&Functions::ReturnsInt::sum>(FailErrCode(0xFF), 1, 0xFF - 1);
+							trieloxit<&Functions::ReturnsInt::sum>(Code::Error(0xFF), 1, 0xFF - 1);
 							return 0;
 						}
 
 						int product() {
-							trieloxit<&Functions::ReturnsInt::product>(FailErrCode(0xFF), 1, 0xFF, 1);
+							trieloxit<&Functions::ReturnsInt::product>(Code::Error(0xFF), 1, 0xFF, 1);
 							return 0;
 						}
 					}
 
 					namespace ReturnsBool {
 						int returns_false() {
-							trieloxit<&Functions::ReturnsBool::returns_false>(FailErrCode(false));
+							trieloxit<&Functions::ReturnsBool::returns_false>(Code::Error(false));
 							return 0;
 						}		
 
 						int returns_true() {
-							trieloxit<&Functions::ReturnsBool::returns_true>(FailErrCode(true));
+							trieloxit<&Functions::ReturnsBool::returns_true>(Code::Error(true));
 							return 0;
 						}		
 					}
@@ -406,6 +444,7 @@ namespace Trielo {
 				trielo<Tests::Trielo::Vanilla::ReturnsVoid::without_args>();
 				trielo<Tests::Trielo::Vanilla::ReturnsVoid::one_arg>();
 				trielo<Tests::Trielo::Vanilla::ReturnsVoid::two_args>();
+				trielo<Tests::Trielo::Vanilla::ReturnsVoid::consumes_arg_reference>();
 				trielo<Tests::Trielo::Vanilla::ReturnsInt::without_args>();
 				trielo<Tests::Trielo::Vanilla::ReturnsInt::one_arg>();
 				trielo<Tests::Trielo::Vanilla::ReturnsInt::sum>();
@@ -454,14 +493,8 @@ namespace Trielo {
 	}
 }
 
-void my_test_func_name() {
-
-}
-
 namespace Trielo {
 	namespace Tests {
-		int run_all();
-
 		int run_all() {
 			static int trieloxit_fail_num = 0;
 			if(trieloxit_fail_num < 12) {
@@ -529,20 +562,149 @@ namespace Trielo {
 		}
 
 		int run_get_func_name() {
-			if(get_func_name<my_test_func_name>() != std::string("my_test_func_name")) {
+			if constexpr(
+				Inner::Get::func_name<Functions::ReturnsVoid::without_args>() != std::string_view(
+					#ifdef _MSC_VER
+					"void __cdecl Trielo::Tests::Functions::ReturnsVoid::without_args"
+					#else
+					"void Trielo::Tests::Functions::ReturnsVoid::without_args"
+					#endif
+				)
+			) {
 				return -1;
-			} else {
-				return 0;
 			}
+
+			return 0;
 		}
 
 		int run_get_type_name() {
 			int i = 0;
-			if(get_type_name<decltype(i)>() != std::string("int")) {
+			if constexpr (Inner::Get::type_name<decltype(i)>() != std::string_view("int")) {
 				return -1;
-			} else {
-				return 0;
+			}
+
+			return 0;
+		}
+
+	}
+}
+
+namespace Trielo {
+	namespace Tests {
+		namespace Print {
+			int ostreamable() {
+				std::ostringstream std_cout_redirect;
+				auto default_std_cout = std::cout.rdbuf();
+				// Redirect std::cout
+				std::cout.rdbuf(std_cout_redirect.rdbuf());
+
+				const int ret = [&std_cout_redirect]() {
+					Ostreamable ostreamable;
+					//trielo_print_func_name_and_args<Functions::ReturnsVoid::consumes_ostreamable>(ostreamable);
+					if(std_cout_redirect.view() != std::string_view(
+						#ifdef _MSC_VER
+							"void __cdecl Trielo::Tests::Functions::ReturnsVoid::consumes_ostreamable(struct Trielo::Tests::Ostreamable: '4206969')"
+						#else
+						#endif
+					)) {
+						return -1;
+					}
+
+					// This ugly hack clears the buffer by constructing an std::string from const char* and swapping the contents with it because std::ostringstream::clear() only clears its error state? C++ waduhek?
+					std_cout_redirect.str("");
+					//Inner::Print::push_func_name_push_args_to_output<Functions::ReturnsOstreamable::consumes_ostreamable>(std::cref(ostreamable));
+					if(std_cout_redirect.view() != std::string_view(
+						#ifdef _MSC_VER
+							"struct Trielo::Tests::Ostreamable __cdecl Trielo::Tests::Functions::ReturnsOstreamable::consumes_ostreamable(struct Trielo::Tests::Ostreamable: '4206969')"
+						#else
+						#endif
+					)) {
+						return -2;
+					}
+
+					return 0;
+				}();
+
+				// Restore std::cout
+				std::cout.rdbuf(default_std_cout);
+
+				return ret;
+			}
+
+			template<typename... Args>
+			concept supports_std_cout = requires (std::ostream& os, const Args&&... args) {
+				{ ((os << std::forward<const Args>(args)), ...) } -> std::same_as<std::ostream&>;
+			};
+
+			template<typename Arg> requires supports_std_cout<Arg>
+			static inline void inner_print(const Arg&& arg) {
+				std::cout << std::forward<const Arg>(arg);
+			}
+
+			template<typename Arg>
+			static inline void inner_print(const Arg&& arg) {
+				if constexpr(std::is_pointer_v<Arg>) {
+					std::cout << static_cast<const void*>(arg);
+				} else {
+					std::cout << static_cast<const void*>(&arg);
+				}
+			}
+
+			template<typename Arg>
+			static inline void inner_print_with_trailing_comma(const Arg&& arg) {
+				inner_print(std::forward<const Arg>(arg));
+				std::cout << ", ";
+			}
+
+			template<typename HeadArg, typename... Args> requires supports_std_cout<HeadArg, Args...>
+			static inline void my_print(const HeadArg&& head_arg, const Args&&... args) {
+				inner_print(std::forward<const HeadArg>(head_arg));
+				((inner_print_with_trailing_comma(std::forward<const Args>(args)) << ", "), ...);
+			}
+
+			template<typename HeadArg, typename... Args>
+			[[deprecated("This type does not support printing")]]
+			static inline void my_print(const HeadArg&& head_arg, const Args&&... args) {
+				inner_print(std::forward<const HeadArg>(head_arg));
+				((inner_print_with_trailing_comma(std::forward<const Args>(args)) << ", "), ...);
+			}
+
+			int nonostreamable() {
+				/*
+				std::ostringstream std_cout_redirect;
+				auto default_std_cout = std::cout.rdbuf();
+				// Redirect std::cout
+				std::cout.rdbuf(std_cout_redirect.rdbuf());
+
+				const int ret = [&std_cout_redirect]() {
+					NonOstreamable nonostreamable;
+					trielo_print_func_name_and_args<Functions::ReturnsVoid::consumes_nonostreamable>(std::cref(nonostreamable));
+
+					if(true) {
+						return -1;
+					}
+
+					return 0;
+				}();
+
+				// Restore std::cout
+				std::cout.rdbuf(default_std_cout);
+
+				return ret;
+				*/
+				Ostreamable ostreamable;
+				my_print(std::cref(ostreamable));
+
+				NonOstreamable nonostreamable;
+				my_print(std::cref(nonostreamable));
+				return -1;
 			}
 		}
 	}
+}
+
+
+std::ostream& operator<<(std::ostream& os, const Trielo::Tests::Ostreamable& obj) {
+	os << obj.x;
+	return os;
 }

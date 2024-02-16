@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 project(trielo C CXX ASM)
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 	add_compile_options(-Wall -Wextra -Wpedantic)
@@ -14,66 +14,42 @@ add_library(trielo STATIC
     lib/trielo.cpp
 )
 
+set(TRIELO_LINK_LIBS fmt::fmt)
+set(TRIELO_INCLUDE_DIRS
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/include
+)
+
 target_link_libraries(trielo PRIVATE
-	fmt::fmt
+	${TRIELO_LINK_LIBS}
 )
 
 # Include the header files
 target_include_directories(trielo PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/include
+	${TRIELO_INCLUDE_DIRS}
 )
 
 option(TRIELO_TEST "Enable Trielo Tests" OFF)
 
 if(TRIELO_TEST)
-	add_executable(run_all 
-		tests/run_all.cpp
-		tests/tests.cpp
-	)
-
-	target_include_directories(run_all 
-		PUBLIC ${CMAKE_CURRENT_LIST_DIR}/include
-		PRIVATE ${CMAKE_CURRENT_LIST_DIR}/lib/fmt/include
-	)
-
-	target_link_libraries(run_all PRIVATE
-		fmt::fmt
-	)	
-
-	add_executable(get_type_name 
-		tests/get_type_name.cpp
-		tests/tests.cpp
-	)
-
-	target_include_directories(get_type_name  
-		PUBLIC ${CMAKE_CURRENT_LIST_DIR}/include
-		PRIVATE ${CMAKE_CURRENT_LIST_DIR}/lib/fmt/include
-	)
-
-	target_link_libraries(get_type_name PRIVATE
-		fmt::fmt
-	)	
-
-	add_executable(get_func_name 
-		tests/get_func_name.cpp
-		tests/tests.cpp
-	)
-
-	target_include_directories(get_func_name  
-		PUBLIC ${CMAKE_CURRENT_LIST_DIR}/include
-		PRIVATE ${CMAKE_CURRENT_LIST_DIR}/lib/fmt/include
-	)
-
-	target_link_libraries(get_func_name PRIVATE
-		fmt::fmt
-	)	
-
+	list(APPEND CMAKE_CTEST_ARGUMENTS "--output-on-failure")
 	enable_testing()
-	add_test(NAME Trielo::Tests::run_all
-             COMMAND run_all)
-	add_test(NAME Trielo::Tests::get_type_name
-             COMMAND get_type_name)
-	add_test(NAME Trielo::Tests::get_func_name
-             COMMAND get_func_name)
+
+	set(TEST_SRCS tests/tests.cpp)
+	set(TEST_INCLUDE_DIRS ${TRIELO_INCLUDE_DIRS})
+	set(TEST_LINK_LIBS ${TRIELO_LINK_LIBS})
+
+	function(add_test_case TEST_NAME TEST_SOURCE)
+		add_executable(${TEST_NAME} ${TEST_SRCS} tests/${TEST_SOURCE})
+		target_include_directories(${TEST_NAME} PRIVATE ${TEST_INCLUDE_DIRS})
+		target_link_libraries(${TEST_NAME} PRIVATE ${TEST_LINK_LIBS})
+		add_test(NAME Trielo::Tests::${TEST_NAME}
+				COMMAND ${TEST_NAME})
+	endfunction()
+
+	add_test_case(trielo_get_func_name get_func_name.cpp)
+	add_test_case(trielo_get_type_name get_type_name.cpp)
+	add_test_case(trielo_print_ostreamable print/ostreamable.cpp)
+	add_test_case(trielo_print_nonostreamable print/nonostreamable.cpp)
+	add_test_case(trielo_run_all run_all.cpp)
 endif()
