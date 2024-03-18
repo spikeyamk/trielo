@@ -579,7 +579,7 @@ namespace Trielo {
 
 		int run_get_type_name() {
 			int i = 0;
-			if constexpr (Inner::Get::type_name<decltype(i)>() != std::string_view("int")) {
+			if(Inner::Get::type_name<decltype(i)>() != std::string_view("int")) {
 				return -1;
 			}
 

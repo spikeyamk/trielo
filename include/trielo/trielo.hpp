@@ -45,15 +45,8 @@ namespace Trielo {
 	namespace Inner {
 		namespace Get {
 			template <typename T>
-			static inline constexpr std::string_view type_name() {
-				#ifdef _MSC_VER
-					constexpr std::string_view input { __FUNCSIG__ + 104 };
-					constexpr auto end = input.find(">");
-					return input.substr(0, end);
-				#elif __GNUG__
-					constexpr std::string_view p { __PRETTY_FUNCTION__ };
-					return std::string_view(p.data() + 61, p.find(';', 61) - 61);
-				#endif
+			static inline std::string_view type_name() {
+				return typeid(T).name();
 			}
 
 			template <auto func_ptr>
