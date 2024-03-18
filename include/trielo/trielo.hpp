@@ -79,23 +79,22 @@ namespace Trielo {
 	namespace Inner {
 		namespace Print {
 			template<typename Arg> requires supports_std_cout<Arg>
-			static inline void push_arg_to_output(std::stringstream& output, const Arg&& arg) {
-				output << std::forward<const Arg>(arg);
-			}
-
-			template<typename Arg>
-			static inline void push_arg_to_output(std::stringstream& output, const Arg&& arg) {
-				if constexpr(std::is_pointer_v<Arg>) {
-					output << static_cast<const void*>(arg);
-				} else {
-					output << static_cast<const void*>(&arg);
-				}
+			static inline void push_one_arg_to_output(std::stringstream& output, Arg&& arg) {
+				output << Trielo::Inner::Get::type_name<Arg>() << ": '";
+				output << std::forward<Arg>(arg);
+				output << '\'';
 			}
 
 			template <typename Arg>
 			static inline void push_one_arg_to_output(std::stringstream& output, Arg&& arg) {
 				output << Trielo::Inner::Get::type_name<Arg>() << ": '";
-				push_arg_to_output(output, std::forward<Arg>(arg));
+
+				if constexpr(std::is_pointer_v<Arg>) {
+					output << static_cast<const void*>(arg);
+				} else {
+					output << static_cast<const void*>(&arg);
+				}
+
 				output << '\'';
 			}
 
@@ -106,17 +105,17 @@ namespace Trielo {
 				push_one_arg_to_output(output, std::forward<LastArg>(last_arg));
 			}
 
-			template <typename HeadArg, typename... TailArg>
-			static inline void push_func_args_to_output(std::stringstream& output, HeadArg&& head_arg, TailArg&&... tail_arg) {
+			template <typename HeadArg, typename... TailArgs>
+			static inline void push_func_args_to_output(std::stringstream& output, HeadArg&& head_arg, TailArgs&&... tail_args) {
 				push_one_arg_to_output(output, std::forward<HeadArg>(head_arg));
 				output << ", ";
-				push_func_args_to_output(output, std::forward<TailArg>(tail_arg)...);
+				push_func_args_to_output(output, std::forward<TailArgs>(tail_args)...);
 			}
 
 			template <auto func_ptr, typename... Args>
 			static inline void push_func_name_push_args_to_output(std::stringstream& output, Args&&... args) {
 				output << Trielo::Inner::Get::func_name<func_ptr>();
-				output  << "(";
+				output << "(";
 				push_func_args_to_output(output, std::forward<Args>(args)...);
 				output << ")";
 			}
@@ -127,7 +126,7 @@ namespace Trielo {
 			Print::push_func_name_push_args_to_output<func_ptr>(output, std::forward<Args>(args)...);
 			const auto result { func_ptr(std::forward<Args>(args)...) };
 			output << ": ";
-			Trielo::Inner::Print::push_arg_to_output(output, std::forward<decltype(result)>(result));
+			Trielo::Inner::Print::push_one_arg_to_output(output, std::forward<decltype(result)>(result));
 			return std::move(result);
 		}
 	}

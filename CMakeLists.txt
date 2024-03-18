@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.26)
 project(trielo C CXX ASM)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 20)
@@ -10,9 +10,7 @@ endif()
 add_subdirectory(lib/fmt)
 
 # Create a library target
-add_library(trielo STATIC
-    lib/trielo.cpp
-)
+add_library(trielo INTERFACE)
 
 set(TRIELO_LINK_LIBS fmt::fmt)
 set(TRIELO_INCLUDE_DIRS
@@ -20,12 +18,12 @@ set(TRIELO_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/include
 )
 
-target_link_libraries(trielo PRIVATE
+target_link_libraries(trielo INTERFACE
 	${TRIELO_LINK_LIBS}
 )
 
 # Include the header files
-target_include_directories(trielo PUBLIC
+target_include_directories(trielo INTERFACE
 	${TRIELO_INCLUDE_DIRS}
 )
 

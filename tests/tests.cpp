@@ -593,17 +593,17 @@ namespace Trielo {
 	namespace Tests {
 		namespace Print {
 			int ostreamable() {
-				std::ostringstream std_cout_redirect;
+				std::stringstream std_cout_redirect;
 				auto default_std_cout = std::cout.rdbuf();
 				// Redirect std::cout
 				std::cout.rdbuf(std_cout_redirect.rdbuf());
 
 				const int ret = [&std_cout_redirect]() {
 					Ostreamable ostreamable;
-					//trielo_print_func_name_and_args<Functions::ReturnsVoid::consumes_ostreamable>(ostreamable);
+					Inner::Print::push_func_name_push_args_to_output<Functions::ReturnsVoid::consumes_ostreamable>(std_cout_redirect, ostreamable);
 					if(std_cout_redirect.view() != std::string_view(
 						#ifdef _MSC_VER
-							"void __cdecl Trielo::Tests::Functions::ReturnsVoid::consumes_ostreamable(struct Trielo::Tests::Ostreamable: '4206969')"
+							"void __cdecl Trielo::Tests::Functions::ReturnsVoid::consumes_ostreamable(struct Trielo::Tests::Ostreamable&: '4206969')"
 						#else
 						#endif
 					)) {
@@ -612,10 +612,10 @@ namespace Trielo {
 
 					// This ugly hack clears the buffer by constructing an std::string from const char* and swapping the contents with it because std::ostringstream::clear() only clears its error state? C++ waduhek?
 					std_cout_redirect.str("");
-					//Inner::Print::push_func_name_push_args_to_output<Functions::ReturnsOstreamable::consumes_ostreamable>(std::cref(ostreamable));
+					Inner::Print::push_func_name_push_args_to_output<Functions::ReturnsOstreamable::consumes_ostreamable>(std_cout_redirect, ostreamable);
 					if(std_cout_redirect.view() != std::string_view(
 						#ifdef _MSC_VER
-							"struct Trielo::Tests::Ostreamable __cdecl Trielo::Tests::Functions::ReturnsOstreamable::consumes_ostreamable(struct Trielo::Tests::Ostreamable: '4206969')"
+							"struct Trielo::Tests::Ostreamable __cdecl Trielo::Tests::Functions::ReturnsOstreamable::consumes_ostreamable(struct Trielo::Tests::Ostreamable&: '4206969')"
 						#else
 						#endif
 					)) {
@@ -670,34 +670,38 @@ namespace Trielo {
 			}
 
 			int nonostreamable() {
-				/*
-				std::ostringstream std_cout_redirect;
+				std::stringstream std_cout_redirect;
 				auto default_std_cout = std::cout.rdbuf();
 				// Redirect std::cout
 				std::cout.rdbuf(std_cout_redirect.rdbuf());
 
-				const int ret = [&std_cout_redirect]() {
-					NonOstreamable nonostreamable;
-					trielo_print_func_name_and_args<Functions::ReturnsVoid::consumes_nonostreamable>(std::cref(nonostreamable));
+				const int ret {
+					[&std_cout_redirect]() {
+						NonOstreamable nonostreamable;
+						Inner::Print::push_func_name_push_args_to_output<Functions::ReturnsVoid::consumes_nonostreamable>(std_cout_redirect, nonostreamable);
 
-					if(true) {
-						return -1;
-					}
-
-					return 0;
-				}();
+						const std::string_view before_pointer_value {
+							#ifdef _MSC_VER
+								"void __cdecl Trielo::Tests::Functions::ReturnsVoid::consumes_nonostreamable(struct Trielo::Tests::NonOstreamable&: '"
+							#endif
+						};
+						if(std_cout_redirect.view().substr(0, before_pointer_value.length()) != before_pointer_value) {
+							return -1;
+						}
+						
+						const std::string_view after_pointer_value { "')" };
+						if(std_cout_redirect.view().find(after_pointer_value, before_pointer_value.length()) == std_cout_redirect.view().size()) {
+							return -2;
+						}
+						
+						return 0;
+					}()
+				};
 
 				// Restore std::cout
 				std::cout.rdbuf(default_std_cout);
 
 				return ret;
-				*/
-				Ostreamable ostreamable;
-				my_print(std::cref(ostreamable));
-
-				NonOstreamable nonostreamable;
-				my_print(std::cref(nonostreamable));
-				return -1;
 			}
 		}
 	}
