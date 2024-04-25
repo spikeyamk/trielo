@@ -7,19 +7,11 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 	add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-add_subdirectory(lib/fmt)
-
 # Create a library target
 add_library(trielo INTERFACE)
 
-set(TRIELO_LINK_LIBS fmt::fmt)
 set(TRIELO_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/include
-)
-
-target_link_libraries(trielo INTERFACE
-	${TRIELO_LINK_LIBS}
 )
 
 # Include the header files
@@ -35,12 +27,10 @@ if(TRIELO_TEST)
 
 	set(TEST_SRCS tests/tests.cpp)
 	set(TEST_INCLUDE_DIRS ${TRIELO_INCLUDE_DIRS})
-	set(TEST_LINK_LIBS ${TRIELO_LINK_LIBS})
 
 	function(add_test_case TEST_NAME TEST_SOURCE)
 		add_executable(${TEST_NAME} ${TEST_SRCS} tests/${TEST_SOURCE})
 		target_include_directories(${TEST_NAME} PRIVATE ${TEST_INCLUDE_DIRS})
-		target_link_libraries(${TEST_NAME} PRIVATE ${TEST_LINK_LIBS})
 		add_test(NAME Trielo::Tests::${TEST_NAME}
 				COMMAND ${TEST_NAME})
 	endfunction()

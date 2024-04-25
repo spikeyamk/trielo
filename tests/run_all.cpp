@@ -2,5 +2,5 @@
 #include "trielo/tests.hpp"
 
 int main() {
-    return Trielo::trielo<Trielo::Tests::run_all>(Trielo::Code::Success(0));
+    return Trielo::trielo<Trielo::Tests::run_all>(Trielo::Success(0));
 }

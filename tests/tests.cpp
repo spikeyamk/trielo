@@ -57,7 +57,6 @@ namespace Trielo {
 	}
 
 	namespace Tests {
-		using namespace Trielo;
 		namespace Trielo {
 			namespace Vanilla {
 				namespace ReturnsVoid {
@@ -140,34 +139,34 @@ namespace Trielo {
 				namespace Success {
 					namespace ReturnsInt {
 						int without_args() {
-							trielo<&Functions::ReturnsInt::without_args>(Code::Success(0xFF));
+							trielo<&Functions::ReturnsInt::without_args>(::Trielo::Success(0xFF));
 							return 0;
 						}
 
 						int one_arg() {
-							trielo<&Functions::ReturnsInt::one_arg>(Code::Success(0xFF), 1);
+							trielo<&Functions::ReturnsInt::one_arg>(::Trielo::Success(0xFF), 1);
 							return 0;
 						}
 
 						int sum() {
-							trielo<&Functions::ReturnsInt::sum>(Code::Success(0xFF), 1, 0xFF - 1);
+							trielo<&Functions::ReturnsInt::sum>(::Trielo::Success(0xFF), 1, 0xFF - 1);
 							return 0;
 						}
 
 						int product() {
-							trielo<&Functions::ReturnsInt::product>(Code::Success(0xFF), 1, 0xFF, 1);
+							trielo<&Functions::ReturnsInt::product>(::Trielo::Success(0xFF), 1, 0xFF, 1);
 							return 0;
 						}
 					}
 
 					namespace ReturnsBool {
 						int returns_false() {
-							trielo<&Functions::ReturnsBool::returns_false>(Code::Success(false));
+							trielo<&Functions::ReturnsBool::returns_false>(::Trielo::Success(false));
 							return 0;
 						}		
 
 						int returns_true() {
-							trielo<&Functions::ReturnsBool::returns_true>(Code::Success(true));
+							trielo<&Functions::ReturnsBool::returns_true>(::Trielo::Success(true));
 							return 0;
 						}		
 					}
@@ -176,34 +175,34 @@ namespace Trielo {
 				namespace ERROR {
 					namespace ReturnsInt {
 						int without_args() {
-							trielo<&Functions::ReturnsInt::without_args>(Code::Success(0x7F));
+							trielo<&Functions::ReturnsInt::without_args>(::Trielo::Success(0x7F));
 							return 0;
 						}
 
 						int one_arg() {
-							trielo<&Functions::ReturnsInt::one_arg>(Code::Success(0x7F), 1);
+							trielo<&Functions::ReturnsInt::one_arg>(::Trielo::Success(0x7F), 1);
 							return 0;
 						}
 
 						int sum() {
-							trielo<&Functions::ReturnsInt::sum>(Code::Success(0x7F), 1, 0xFF - 1);
+							trielo<&Functions::ReturnsInt::sum>(::Trielo::Success(0x7F), 1, 0xFF - 1);
 							return 0;
 						}
 
 						int product() {
-							trielo<&Functions::ReturnsInt::product>(Code::Success(0x7F), 1, 0xFF, 1);
+							trielo<&Functions::ReturnsInt::product>(::Trielo::Success(0x7F), 1, 0xFF, 1);
 							return 0;
 						}
 					}
 
 					namespace ReturnsBool {
 						int returns_false() {
-							trielo<&Functions::ReturnsBool::returns_false>(Code::Success(true));
+							trielo<&Functions::ReturnsBool::returns_false>(::Trielo::Success(true));
 							return 0;
 						}		
 
 						int returns_true() {
-							trielo<&Functions::ReturnsBool::returns_true>(Code::Success(false));
+							trielo<&Functions::ReturnsBool::returns_true>(::Trielo::Success(false));
 							return 0;
 						}		
 					}
@@ -214,34 +213,34 @@ namespace Trielo {
 				namespace Success {
 					namespace ReturnsInt {
 						int without_args() {
-							trielo<&Functions::ReturnsInt::without_args>(Code::Error(0x7F));
+							trielo<&Functions::ReturnsInt::without_args>(Error(0x7F));
 							return 0;
 						}
 
 						int one_arg() {
-							trielo<&Functions::ReturnsInt::one_arg>(Code::Error(0x7F), 1);
+							trielo<&Functions::ReturnsInt::one_arg>(Error(0x7F), 1);
 							return 0;
 						}
 
 						int sum() {
-							trielo<&Functions::ReturnsInt::sum>(Code::Error(0x7F), 1, 0xFF - 1);
+							trielo<&Functions::ReturnsInt::sum>(Error(0x7F), 1, 0xFF - 1);
 							return 0;
 						}
 
 						int product() {
-							trielo<&Functions::ReturnsInt::product>(Code::Error(0x7F), 1, 0xFF, 1);
+							trielo<&Functions::ReturnsInt::product>(Error(0x7F), 1, 0xFF, 1);
 							return 0;
 						}
 					}
 
 					namespace ReturnsBool {
 						int returns_false() {
-							trielo<&Functions::ReturnsBool::returns_false>(Code::Error(true));
+							trielo<&Functions::ReturnsBool::returns_false>(Error(true));
 							return 0;
 						}		
 
 						int returns_true() {
-							trielo<&Functions::ReturnsBool::returns_true>(Code::Error(false));
+							trielo<&Functions::ReturnsBool::returns_true>(Error(false));
 							return 0;
 						}		
 					}
@@ -250,34 +249,34 @@ namespace Trielo {
 				namespace ERROR {
 					namespace ReturnsInt {
 						int without_args() {
-							trielo<&Functions::ReturnsInt::without_args>(Code::Error(0xFF));
+							trielo<&Functions::ReturnsInt::without_args>(Error(0xFF));
 							return 0;
 						}
 
 						int one_arg() {
-							trielo<&Functions::ReturnsInt::one_arg>(Code::Error(0xFF), 1);
+							trielo<&Functions::ReturnsInt::one_arg>(Error(0xFF), 1);
 							return 0;
 						}
 
 						int sum() {
-							trielo<&Functions::ReturnsInt::sum>(Code::Error(0xFF), 1, 0xFF - 1);
+							trielo<&Functions::ReturnsInt::sum>(Error(0xFF), 1, 0xFF - 1);
 							return 0;
 						}
 
 						int product() {
-							trielo<&Functions::ReturnsInt::product>(Code::Error(0xFF), 1, 0xFF, 1);
+							trielo<&Functions::ReturnsInt::product>(Error(0xFF), 1, 0xFF, 1);
 							return 0;
 						}
 					}
 
 					namespace ReturnsBool {
 						int returns_false() {
-							trielo<&Functions::ReturnsBool::returns_false>(Code::Error(false));
+							trielo<&Functions::ReturnsBool::returns_false>(Error(false));
 							return 0;
 						}		
 
 						int returns_true() {
-							trielo<&Functions::ReturnsBool::returns_true>(Code::Error(true));
+							trielo<&Functions::ReturnsBool::returns_true>(Error(true));
 							return 0;
 						}		
 					}
@@ -291,34 +290,34 @@ namespace Trielo {
 				namespace Success {
 					namespace ReturnsInt {
 						int without_args() {
-							trieloxit<&Functions::ReturnsInt::without_args>(Code::Success(0xFF));
+							trieloxit<&Functions::ReturnsInt::without_args>(::Trielo::Success(0xFF));
 							return 0;
 						}
 
 						int one_arg() {
-							trieloxit<&Functions::ReturnsInt::one_arg>(Code::Success(0xFF), 1);
+							trieloxit<&Functions::ReturnsInt::one_arg>(::Trielo::Success(0xFF), 1);
 							return 0;
 						}
 
 						int sum() {
-							trieloxit<&Functions::ReturnsInt::sum>(Code::Success(0xFF), 1, 0xFF - 1);
+							trieloxit<&Functions::ReturnsInt::sum>(::Trielo::Success(0xFF), 1, 0xFF - 1);
 							return 0;
 						}
 
 						int product() {
-							trieloxit<&Functions::ReturnsInt::product>(Code::Success(0xFF), 1, 0xFF, 1);
+							trieloxit<&Functions::ReturnsInt::product>(::Trielo::Success(0xFF), 1, 0xFF, 1);
 							return 0;
 						}
 					}
 
 					namespace ReturnsBool {
 						int returns_false() {
-							trieloxit<&Functions::ReturnsBool::returns_false>(Code::Success(false));
+							trieloxit<&Functions::ReturnsBool::returns_false>(::Trielo::Success(false));
 							return 0;
 						}		
 
 						int returns_true() {
-							trieloxit<&Functions::ReturnsBool::returns_true>(Code::Success(true));
+							trieloxit<&Functions::ReturnsBool::returns_true>(::Trielo::Success(true));
 							return 0;
 						}		
 					}
@@ -327,34 +326,34 @@ namespace Trielo {
 				namespace ERROR {
 					namespace ReturnsInt {
 						int without_args() {
-							trieloxit<&Functions::ReturnsInt::without_args>(Code::Success(0x7F));
+							trieloxit<&Functions::ReturnsInt::without_args>(::Trielo::Success(0x7F));
 							return 0;
 						}
 
 						int one_arg() {
-							trieloxit<&Functions::ReturnsInt::one_arg>(Code::Success(0x7F), 1);
+							trieloxit<&Functions::ReturnsInt::one_arg>(::Trielo::Success(0x7F), 1);
 							return 0;
 						}
 
 						int sum() {
-							trieloxit<&Functions::ReturnsInt::sum>(Code::Success(0x7F), 1, 0xFF - 1);
+							trieloxit<&Functions::ReturnsInt::sum>(::Trielo::Success(0x7F), 1, 0xFF - 1);
 							return 0;
 						}
 
 						int product() {
-							trieloxit<&Functions::ReturnsInt::product>(Code::Success(0x7F), 1, 0xFF, 1);
+							trieloxit<&Functions::ReturnsInt::product>(::Trielo::Success(0x7F), 1, 0xFF, 1);
 							return 0;
 						}
 					}
 
 					namespace ReturnsBool {
 						int returns_false() {
-							trieloxit<&Functions::ReturnsBool::returns_false>(Code::Success(true));
+							trieloxit<&Functions::ReturnsBool::returns_false>(::Trielo::Success(true));
 							return 0;
 						}		
 
 						int returns_true() {
-							trieloxit<&Functions::ReturnsBool::returns_true>(Code::Success(false));
+							trieloxit<&Functions::ReturnsBool::returns_true>(::Trielo::Success(false));
 							return 0;
 						}		
 					}
@@ -365,34 +364,34 @@ namespace Trielo {
 				namespace Success{
 					namespace ReturnsInt {
 						int without_args() {
-							trieloxit<&Functions::ReturnsInt::without_args>(Code::Error(0x7F));
+							trieloxit<&Functions::ReturnsInt::without_args>(Error(0x7F));
 							return 0;
 						}
 
 						int one_arg() {
-							trieloxit<&Functions::ReturnsInt::one_arg>(Code::Error(0x7F), 1);
+							trieloxit<&Functions::ReturnsInt::one_arg>(Error(0x7F), 1);
 							return 0;
 						}
 
 						int sum() {
-							trieloxit<&Functions::ReturnsInt::sum>(Code::Error(0x7F), 1, 0xFF - 1);
+							trieloxit<&Functions::ReturnsInt::sum>(Error(0x7F), 1, 0xFF - 1);
 							return 0;
 						}
 
 						int product() {
-							trieloxit<&Functions::ReturnsInt::product>(Code::Error(0x7F), 1, 0xFF, 1);
+							trieloxit<&Functions::ReturnsInt::product>(Error(0x7F), 1, 0xFF, 1);
 							return 0;
 						}
 					}
 
 					namespace ReturnsBool {
 						int returns_false() {
-							trieloxit<&Functions::ReturnsBool::returns_false>(Code::Error(true));
+							trieloxit<&Functions::ReturnsBool::returns_false>(Error(true));
 							return 0;
 						}		
 
 						int returns_true() {
-							trieloxit<&Functions::ReturnsBool::returns_true>(Code::Error(false));
+							trieloxit<&Functions::ReturnsBool::returns_true>(Error(false));
 							return 0;
 						}		
 					}
@@ -401,34 +400,34 @@ namespace Trielo {
 				namespace ERROR {
 					namespace ReturnsInt {
 						int without_args() {
-							trieloxit<&Functions::ReturnsInt::without_args>(Code::Error(0xFF));
+							trieloxit<&Functions::ReturnsInt::without_args>(Error(0xFF));
 							return 0;
 						}
 
 						int one_arg() {
-							trieloxit<&Functions::ReturnsInt::one_arg>(Code::Error(0xFF), 1);
+							trieloxit<&Functions::ReturnsInt::one_arg>(Error(0xFF), 1);
 							return 0;
 						}
 
 						int sum() {
-							trieloxit<&Functions::ReturnsInt::sum>(Code::Error(0xFF), 1, 0xFF - 1);
+							trieloxit<&Functions::ReturnsInt::sum>(Error(0xFF), 1, 0xFF - 1);
 							return 0;
 						}
 
 						int product() {
-							trieloxit<&Functions::ReturnsInt::product>(Code::Error(0xFF), 1, 0xFF, 1);
+							trieloxit<&Functions::ReturnsInt::product>(Error(0xFF), 1, 0xFF, 1);
 							return 0;
 						}
 					}
 
 					namespace ReturnsBool {
 						int returns_false() {
-							trieloxit<&Functions::ReturnsBool::returns_false>(Code::Error(false));
+							trieloxit<&Functions::ReturnsBool::returns_false>(Error(false));
 							return 0;
 						}		
 
 						int returns_true() {
-							trieloxit<&Functions::ReturnsBool::returns_true>(Code::Error(true));
+							trieloxit<&Functions::ReturnsBool::returns_true>(Error(true));
 							return 0;
 						}		
 					}

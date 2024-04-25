@@ -8,15 +8,12 @@
 #include <functional>
 #include <iostream>
 
-#include "fmt/core.h"
-#include "fmt/color.h"
-
 #define TRIELO_EQ(call, expected) do {\
     const auto result { call };\
 	if(result == expected) {\
-    	fmt::print(fmt::fg(fmt::color::green), "Success: ");\
+		std::cout << "\033[32mSuccess: \033[m";\
 	} else {\
-		fmt::print(fmt::fg(fmt::color::red), "ERROR: ");\
+		std::cout << "\033[31mERROR: \033[m";\
 	}\
     std::cout << #call << ": '" << result << "'\n";\
 } while (false)
@@ -26,21 +23,19 @@
 #define TRIELO_VOID(call) std::cout << #call << ": '\n"; call;
 
 namespace Trielo {
-	namespace Code {
-		template <typename T_Result>
-		struct Success {
-			T_Result value;
-			explicit Success(const T_Result& v) : value{ v } 
-			{}
-		};
+	template <typename T_Result>
+	struct Success {
+		T_Result value;
+		explicit Success(const T_Result& v) : value{ v } 
+		{}
+	};
 
-		template <typename T_Result>
-		struct Error {
-			T_Result value;
-			explicit Error(const T_Result& v) : value{ v } 
-			{}
-		};
-	}
+	template <typename T_Result>
+	struct Error {
+		T_Result value;
+		explicit Error(const T_Result& v) : value{ v } 
+		{}
+	};
 
 	namespace Inner {
 		namespace Get {
@@ -162,7 +157,7 @@ namespace Trielo {
 
 namespace Trielo {
 	template <auto funcPtr, typename T_Result, typename... Args>
-	static auto trielo(Code::Success<T_Result> success_code, Args&&... args) {
+	static auto trielo(Success<T_Result> success_code, Args&&... args) {
 		static_assert(
 			std::is_same_v<std::invoke_result_t<decltype(funcPtr), Args...>,
 				       T_Result>,
@@ -172,9 +167,9 @@ namespace Trielo {
 		auto result = funcPtr(std::forward<Args>(args)...);
 
 		if (result == success_code.value) {
-    		fmt::print(fmt::fg(fmt::color::green), "Success: ");
+			std::cout << "\033[32mSuccess: \033[m";
 		} else {
-    		fmt::print(fmt::fg(fmt::color::red), "ERROR: ");
+			std::cout << "\033[31mERROR: \033[m";
 		}
 		//Inner::Print::push_func_name_push_args_to_output<funcPtr>(std::forward<Args>(args)...);
 		std::cout << ": '";
@@ -189,7 +184,7 @@ namespace Trielo {
 	}
 
 	template <auto funcPtr, typename T_Result, typename... Args>
-	static auto trielo(Code::Error<T_Result> error_code, Args&&... args) {
+	static auto trielo(Error<T_Result> error_code, Args&&... args) {
 		static_assert(
 			std::is_same_v<std::invoke_result_t<decltype(funcPtr), Args...>,
 				       T_Result>,
@@ -199,9 +194,9 @@ namespace Trielo {
 		auto result = funcPtr(std::forward<Args>(args)...);
 
 		if (result == error_code.value) {
-    		fmt::print(fmt::fg(fmt::color::red), "ERROR: ");
+			std::cout << "\033[31mERROR: \033[m";
 		} else {
-    		fmt::print(fmt::fg(fmt::color::green), "Success: ");
+			std::cout << "\033[32mSuccess: \033[m";
 		}
 		//Inner::Print::push_func_name_push_args_to_output<funcPtr>(std::forward<Args>(args)...);
 		std::cout << ": '";
@@ -218,7 +213,7 @@ namespace Trielo {
 
 namespace Trielo {
 	template <auto funcPtr, typename T_Lambda, typename T_Result, typename... Args>
-	auto trielo_lambda(Code::Success<T_Result> success_code, T_Lambda lambda, Args&&... args) {
+	auto trielo_lambda(Success<T_Result> success_code, T_Lambda lambda, Args&&... args) {
 		const auto result = trielo<funcPtr>(success_code, std::forward<Args>(args)...);
 		if(result != success_code.value) {
 			lambda();
@@ -227,7 +222,7 @@ namespace Trielo {
 	}
 
 	template <auto funcPtr, typename T_Lambda, typename T_Result, typename... Args>
-	auto trielo_lambda(Code::Error<T_Result> error_code, T_Lambda lambda, Args&&... args) {
+	auto trielo_lambda(Error<T_Result> error_code, T_Lambda lambda, Args&&... args) {
 		const auto result = trielo<funcPtr>(error_code, std::forward<Args>(args)...);
 		if(result != error_code.value) {
 			lambda();
@@ -238,7 +233,7 @@ namespace Trielo {
 
 namespace Trielo {
 	template <auto funcPtr, typename T_Result, typename... Args>
-	auto trieloxit(Code::Success<T_Result> success_code, Args&&... args) {
+	auto trieloxit(Success<T_Result> success_code, Args&&... args) {
 		const auto result = trielo<funcPtr>(success_code, std::forward<Args>(args)...);
 		if(result != success_code.value) {
 			std::exit(EXIT_FAILURE);
@@ -247,7 +242,7 @@ namespace Trielo {
 	}
 
 	template <auto funcPtr, typename T_Result, typename... Args>
-	auto trieloxit(Code::Error<T_Result> error_code, Args&&... args) {
+	auto trieloxit(Error<T_Result> error_code, Args&&... args) {
 		const auto result = trielo<funcPtr>(error_code, std::forward<Args>(args)...);
 		if(result == error_code.value) {
 			std::exit(EXIT_FAILURE);
@@ -258,7 +253,7 @@ namespace Trielo {
 
 namespace Trielo {
 	template <auto funcPtr, typename T_Lambda, typename T_Result, typename... Args>
-	auto trieloxit_lambda(Code::Success<T_Result> success_code, T_Lambda lambda, Args&&... args) {
+	auto trieloxit_lambda(Success<T_Result> success_code, T_Lambda lambda, Args&&... args) {
 		const auto result = trielo<funcPtr>(success_code, std::forward<Args>(args)...);
 		if(result != success_code.value) {
 			lambda();
@@ -268,7 +263,7 @@ namespace Trielo {
 	}
 
 	template <auto funcPtr, typename T_Lambda, typename T_Result, typename... Args>
-	auto trieloxit_lambda(Code::Error<T_Result> error_code, T_Lambda lambda, Args&&... args) {
+	auto trieloxit_lambda(Error<T_Result> error_code, T_Lambda lambda, Args&&... args) {
 		const auto result = trielo<funcPtr>(error_code, std::forward<Args>(args)...);
 		if(result == error_code.value) {
 			lambda();
