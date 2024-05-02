@@ -495,7 +495,7 @@ namespace Trielo {
 namespace Trielo {
 	namespace Tests {
 		int run_all() {
-			static int trieloxit_fail_num = 0;
+			static int trieloxit_fail_num { 0 };
 			if(trieloxit_fail_num < 12) {
 				std::atexit([]() { 
 					trieloxit_fail_num++;
@@ -562,7 +562,7 @@ namespace Trielo {
 
 		int run_get_func_name() {
 			if constexpr(
-				Inner::Get::func_name<Functions::ReturnsVoid::without_args>() != std::string_view(
+				Detail::func_name<Functions::ReturnsVoid::without_args>() != std::string_view(
 					#ifdef _MSC_VER
 					"void __cdecl Trielo::Tests::Functions::ReturnsVoid::without_args"
 					#else
@@ -578,7 +578,7 @@ namespace Trielo {
 
 		int run_get_type_name() {
 			int i = 0;
-			if(Inner::Get::type_name<decltype(i)>() != std::string_view("int")) {
+			if(Detail::type_name<decltype(i)>() != std::string_view("int")) {
 				return -1;
 			}
 
@@ -599,10 +599,10 @@ namespace Trielo {
 
 				const int ret = [&std_cout_redirect]() {
 					Ostreamable ostreamable;
-					Inner::Print::push_func_name_push_args_to_output<Functions::ReturnsVoid::consumes_ostreamable>(std_cout_redirect, ostreamable);
+					Detail::Print::push_func_name_push_args_to_output<Functions::ReturnsVoid::consumes_ostreamable>(std_cout_redirect, ostreamable);
 					if(std_cout_redirect.view() != std::string_view(
 						#ifdef _MSC_VER
-							"void __cdecl Trielo::Tests::Functions::ReturnsVoid::consumes_ostreamable(struct Trielo::Tests::Ostreamable&: '4206969')"
+							"void __cdecl Trielo::Tests::Functions::ReturnsVoid::consumes_ostreamable(struct Trielo::Tests::Ostreamable: '4206969')"
 						#else
 						#endif
 					)) {
@@ -611,10 +611,10 @@ namespace Trielo {
 
 					// This ugly hack clears the buffer by constructing an std::string from const char* and swapping the contents with it because std::ostringstream::clear() only clears its error state? C++ waduhek?
 					std_cout_redirect.str("");
-					Inner::Print::push_func_name_push_args_to_output<Functions::ReturnsOstreamable::consumes_ostreamable>(std_cout_redirect, ostreamable);
+					Detail::Print::push_func_name_push_args_to_output<Functions::ReturnsOstreamable::consumes_ostreamable>(std_cout_redirect, ostreamable);
 					if(std_cout_redirect.view() != std::string_view(
 						#ifdef _MSC_VER
-							"struct Trielo::Tests::Ostreamable __cdecl Trielo::Tests::Functions::ReturnsOstreamable::consumes_ostreamable(struct Trielo::Tests::Ostreamable&: '4206969')"
+							"struct Trielo::Tests::Ostreamable __cdecl Trielo::Tests::Functions::ReturnsOstreamable::consumes_ostreamable(struct Trielo::Tests::Ostreamable: '4206969')"
 						#else
 						#endif
 					)) {
@@ -677,11 +677,11 @@ namespace Trielo {
 				const int ret {
 					[&std_cout_redirect]() {
 						NonOstreamable nonostreamable;
-						Inner::Print::push_func_name_push_args_to_output<Functions::ReturnsVoid::consumes_nonostreamable>(std_cout_redirect, nonostreamable);
+						Detail::Print::push_func_name_push_args_to_output<Functions::ReturnsVoid::consumes_nonostreamable>(std_cout_redirect, nonostreamable);
 
 						const std::string_view before_pointer_value {
 							#ifdef _MSC_VER
-								"void __cdecl Trielo::Tests::Functions::ReturnsVoid::consumes_nonostreamable(struct Trielo::Tests::NonOstreamable&: '"
+								"void __cdecl Trielo::Tests::Functions::ReturnsVoid::consumes_nonostreamable(struct Trielo::Tests::NonOstreamable: '"
 							#endif
 						};
 						if(std_cout_redirect.view().substr(0, before_pointer_value.length()) != before_pointer_value) {

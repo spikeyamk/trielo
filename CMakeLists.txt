@@ -1,22 +1,11 @@
 cmake_minimum_required(VERSION 3.26)
-project(trielo C CXX ASM)
-set(CMAKE_C_STANDARD 11)
+project(trielo CXX)
 set(CMAKE_CXX_STANDARD 20)
 
-if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-	add_compile_options(-Wall -Wextra -Wpedantic)
-endif()
-
-# Create a library target
 add_library(trielo INTERFACE)
 
-set(TRIELO_INCLUDE_DIRS
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-)
-
-# Include the header files
 target_include_directories(trielo INTERFACE
-	${TRIELO_INCLUDE_DIRS}
+	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
 option(TRIELO_TEST "Enable Trielo Tests" OFF)
@@ -30,7 +19,7 @@ if(TRIELO_TEST)
 
 	function(add_test_case TEST_NAME TEST_SOURCE)
 		add_executable(${TEST_NAME} ${TEST_SRCS} tests/${TEST_SOURCE})
-		target_include_directories(${TEST_NAME} PRIVATE ${TEST_INCLUDE_DIRS})
+		target_link_libraries(${TEST_NAME} trielo)
 		add_test(NAME Trielo::Tests::${TEST_NAME}
 				COMMAND ${TEST_NAME})
 	endfunction()
