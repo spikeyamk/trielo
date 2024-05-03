@@ -10,6 +10,9 @@ namespace Trielo {
 			namespace ReturnsVoid {
 				void without_args() {}
 				void one_arg(int x = 1) { int junk = x; junk++; }
+				void one_function_pointer(void (*ptr)(void)) {
+					(void) ptr;
+				}
 				void two_args(int x = 1, float y = 2.0f) { (void) x; (void) y; };
 				void consumes_ostreamable(const Ostreamable& obj) {
 					(void) obj;
@@ -67,6 +70,11 @@ namespace Trielo {
 
 					int one_arg() {
 						trielo<&Functions::ReturnsVoid::one_arg>(1);
+						return 0;
+					}
+
+					int one_function_pointer() {
+						trielo<&Functions::ReturnsVoid::one_function_pointer>(&Functions::ReturnsVoid::without_args);
 						return 0;
 					}
 
@@ -442,6 +450,7 @@ namespace Trielo {
 			void vanilla() {
 				trielo<Tests::Trielo::Vanilla::ReturnsVoid::without_args>();
 				trielo<Tests::Trielo::Vanilla::ReturnsVoid::one_arg>();
+				trielo<Tests::Trielo::Vanilla::ReturnsVoid::one_function_pointer>();
 				trielo<Tests::Trielo::Vanilla::ReturnsVoid::two_args>();
 				trielo<Tests::Trielo::Vanilla::ReturnsVoid::consumes_arg_reference>();
 				trielo<Tests::Trielo::Vanilla::ReturnsInt::without_args>();

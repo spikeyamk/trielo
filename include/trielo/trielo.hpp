@@ -76,7 +76,9 @@ namespace Trielo {
 			template<typename Arg> requires supports_std_cout<Arg>
 			inline void push_one_arg_to_output(std::ostream& output, Arg&& arg) {
 				output << Trielo::Detail::type_name<Arg>() << ": '";
-				output << std::forward<Arg>(arg);
+				if constexpr (!std::is_same_v<Arg, void (&)(void*)>) {
+					output << std::forward<Arg>(arg);
+				} 
 				output << '\'';
 			}
 

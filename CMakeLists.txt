@@ -11,6 +11,12 @@ target_include_directories(trielo INTERFACE
 option(TRIELO_TEST "Enable Trielo Tests" OFF)
 
 if(TRIELO_TEST)
+	if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU|Clang")
+		target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
+	elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+		target_compile_options(${PROJECT_NAME} PRIVATE /W4)
+	endif()
+
 	list(APPEND CMAKE_CTEST_ARGUMENTS "--output-on-failure")
 	enable_testing()
 
