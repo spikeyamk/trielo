@@ -93,7 +93,9 @@ namespace Trielo {
 				output << '\'';
 			}
 
-			inline void push_func_args_to_output(std::ostream& output) {}
+			inline void push_func_args_to_output(std::ostream& output) {
+                (void) output;
+            }
 
 			template <typename LastArg>
 			inline void push_func_args_to_output(std::ostream& output, LastArg&& last_arg) {
