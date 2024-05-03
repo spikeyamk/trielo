@@ -41,9 +41,9 @@ namespace Trielo {
 #define TRIELO_EQ(call, expected) do {\
     const auto result { call };\
 	if(result == expected) {\
-		Trielo::detail::print_success();\
+		Trielo::Detail::print_success();\
 	} else {\
-		Trielo::detail::print_error();\
+		Trielo::Detail::print_error();\
 	}\
     std::cout << #call << ": '" << result << "'\n";\
 } while (false)
@@ -64,8 +64,7 @@ namespace Trielo {
 	struct Error {
 		T_Result value;
 		explicit Error(const T_Result& v) : value{ v } 
-		{}
-	};
+		{} };
 
 	namespace Detail {
 		namespace Print {
