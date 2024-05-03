@@ -81,7 +81,6 @@ namespace Trielo {
 			}
 
 			template <typename Arg>
-			[[deprecated("This type does not support printing")]]
 			inline void push_one_arg_to_output(std::ostream& output, Arg&& arg) {
 				output << Trielo::Detail::type_name<Arg>() << ": '";
 
